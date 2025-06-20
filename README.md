@@ -1,4 +1,4 @@
-# ClassifyAPI 🚀
+# Clarion 🚀
 
 ![Project Status](https://img.shields.io/badge/status-pre--alpha-orange)
 ![Language](https://img.shields.io/badge/python-3.9%2B-blue)
