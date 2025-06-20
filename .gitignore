@@ -1,1 +1,11 @@
-/.venv/
+# Python
+__pycache__/
+*.pyc
+.venv/
+dist/
+*.egg-info/
+
+# IDE / OS specific
+.vscode/
+.idea/
+.DS_Store
