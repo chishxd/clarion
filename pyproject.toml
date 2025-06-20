@@ -7,6 +7,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "predictserve"
 version = "0.1.0"
+license = "MIT"
 authors = [
   { name="Chinmay (Chish)", email="chishxd@tutamail.com" },
 ]
@@ -19,7 +20,7 @@ classifiers = [
 ]
 # Add your project's dependencies here
 # example: dependencies = ["pandas", "io", "boto3"]
-dependencies = []
+dependencies = ["pandas", "io", "boto3"]
 
 [project.urls]
 Homepage = "https://github.com/chishxd/predictserve"
