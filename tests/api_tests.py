@@ -2,13 +2,13 @@ import requests
 
 payload = { #type:ignore
   "Pclass": 3,
-  "Sex": "male",
+  "Sex": "female",
   "Age": 22,
-  "SibSp": 1,
+  "SibSp": 4,
   "Parch": 0,
   "Fare": 7.25,
   "Embarked": "S"
 }
 
-r = requests.post("http://127.0.0.1:8000/predict", json=payload) #type:ignore
+r = requests.post("http://localhost/predict", json=payload) #type:ignore
 print(r.json())

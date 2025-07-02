@@ -2,6 +2,13 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib 
 import pandas as pd
+from clarion import utils   # type: ignore
+
+utils.download_file_from_minio(bucket_name='autocleanse-data', object_key='models/titanic_model.pkl', local_path='/tmp/model.pkl')  # type: ignore
+utils.download_file_from_minio(bucket_name='autocleanse-data', object_key='models/titanic_scaler.pkl', local_path='/tmp/scaler.pkl')  # type: ignore
+utils.download_file_from_minio(bucket_name='autocleanse-data', object_key='models/training_columns.pkl', local_path='/tmp/columns.pkl')  # type: ignore
+
+
 app = FastAPI()
 
 class PassengerData(BaseModel):
@@ -15,9 +22,9 @@ class PassengerData(BaseModel):
     
 @app.post("/predict")
 async def predict(data : PassengerData):
-    model = joblib.load("models/titanic_model.pkl") #type:ignore
-    scaler = joblib.load("models/titanic_scaler.pkl") # type: ignore
-    training_columns = joblib.load("models/training_columns.pkl")  # type: ignore
+    model = joblib.load("/tmp/model.pkl") #type:ignore
+    scaler = joblib.load("/tmp/scaler.pkl") # type: ignore
+    training_columns = joblib.load("/tmp/columns.pkl")  # type: ignore
 
     df  = pd.DataFrame([data.model_dump()])
     df['Is_Alone'] = ((df['SibSp'] + df['Parch']) == 0).astype(int)
