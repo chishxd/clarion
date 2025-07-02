@@ -1,77 +1,105 @@
 # Clarion 🚀
 
-![Project Status](https://img.shields.io/badge/status-pre--alpha-orange)
-![Language](https://img.shields.io/badge/python-3.9%2B-blue)
-![Framework](https://img.shields.io/badge/framework-Flask%2FFastAPI-lightgrey)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
+A lightweight FastAPI service for serving machine learning classification models — containerized and ready for local or cloud deployment.
 
-> A lightweight, cloud-deployed web API for serving machine learning classification models.
+---
 
-## The Mission
+## 📌 Features
 
-This project serves as the practical application for the "Cloud Computing for Data Science" diploma curriculum. Its goal is to take a trained machine learning model and make it accessible to the world through a simple, robust API.
+- ✅ **FastAPI** web server with `/predict` endpoint
+- ✅ Loads a serialized ML model (`.pkl`) for live predictions
+- ✅ Integrates with S3-compatible storage (MinIO) for model assets
+- ✅ Containerized with **Docker** for portability
+- ✅ Clean Python package structure (`src/`, `models/`, `tests/`)
 
-This project picks up where the [`AutoCleanSE`](https://github.com/chishxd/autocleanse) project leaves off. We will use the clean data produced by `AutoCleanSE` to train a model, and then we will build the infrastructure to deploy and serve that model in the cloud.
+---
 
-## Core Features (The Roadmap)
+## 🚀 Getting Started
 
--   [ ] **API Framework:** A simple web server using Flask or FastAPI to define prediction endpoints.
--   [x] **Cloud Storage Integration:** Ability to connect to S3-compatible object storage (like MinIO or AWS S3) to retrieve assets.
--   [ ] **Model Serving:** Load a serialized ML model (e.g., a `.pkl` file) and use it to make live predictions.
--   [ ] **Cloud Deployment:** The entire application will be packaged and deployed to a cloud provider (e.g., as an AWS Lambda function).
--   [ ] **Containerization:** The application will be containerized using Docker/Podman for portability.
-
-## Current Status
-
-We have successfully established programmatic access to a local, S3-compatible MinIO server using `boto3`. This proves our ability to interact with cloud storage, which is the foundational first step.
-
-### Local Setup for Cloud Simulation
-
-This project uses **MinIO** to simulate AWS S3 locally. This allows for rapid, offline development.
-
-<details>
-<summary><b>Running the Local MinIO Server</b></summary>
+### 1️⃣ Clone the repo
 
 ```bash
-# First, ensure the MinIO container exists. If not, create it.
-# This command runs the server in the background.
-podman run -d -p 9000:9000 -p 9001:9001 --name minio-server -v ~/minio-data:/data -e "MINIO_ROOT_USER=admin" -e "MINIO_ROOT_PASSWORD=password" minio/minio server /data --console-address ":9001"
+git clone https://github.com/chishxd/clarion.git
+cd clarion
+````
 
-# To start the server for a new work session:
-podman start minio-server
+### 2️⃣ Local development
 
-# To stop the server:
-podman stop minio-server
-```
-</details>
+```bash
+# Create and activate virtual environment
+python -m venv .venv
+source .venv/bin/activate
 
-## Usage
+# Install the package in editable mode
+pip install -e .
 
-The current test script demonstrates how to connect to the MinIO server.
-
-```python
-# cloud_test.py
-import boto3
-
-# --- Configuration ---
-access_key = "admin"
-secret_key = "password"
-endpoint_url = "http://127.0.0.1:9000"
-# ---
-
-s3_client = boto3.client(
-    's3',
-    endpoint_url=endpoint_url,
-    aws_access_key_id=access_key,
-    aws_secret_access_key=secret_key
-)
-
-response = s3_client.list_buckets()
-print("Successfully connected. Found buckets:")
-for bucket in response['Buckets']:
-    print(f"- {bucket['Name']}")
+# Run the API server with hot reload
+uvicorn clarion.app:app --reload
 ```
 
-## License
+---
 
-Distributed under the MIT License.
+## 🐳 Docker
+
+Build and run the containerized API:
+
+```bash
+# Build image
+docker build -t clarion-api .
+
+# Run container
+docker run -p 8000:8000 clarion-api
+```
+
+Access the API at [http://localhost:8000](http://localhost:8000).
+
+---
+
+## 🔬 Example API Request
+
+```bash
+curl -X POST "http://localhost:8000/predict" \
+  -H "Content-Type: application/json" \
+  -d '{"feature1": 1.2, "feature2": 0.8, "...": "..."}'
+```
+
+**Sample Response**
+
+```json
+{
+  "prediction": 1
+}
+```
+
+---
+
+## ✅ Tests
+
+Run unit tests with `pytest`:
+
+```bash
+pytest
+```
+
+---
+
+## ⚙️ Roadmap
+
+* [x] Local FastAPI prediction endpoint
+* [x] Model file versioning (`models/`)
+* [x] S3-compatible storage tested with MinIO
+* [x] Containerized with Docker
+* [ ] Cloud deployment (Planned)
+
+---
+
+## 📜 License
+
+Distributed under the **MIT License**.
+
+---
+
+## ✨ Credits
+
+Clarion is built as part of the **Cloud Computing for Data Science** curriculum.
+It follows up on the [AutoCleanSE](https://github.com/chishxd/autocleanse) project for robust data preprocessing.
