@@ -3,11 +3,16 @@ import io
 import pandas as pd
 import joblib
 import boto3
+import os
 
-def get_s3_client(access_key = "admin", secret_key = "root@123", endpoint_url = "http://localhost:9000", data_key = None): # type: ignore
+def get_s3_client(access_key = None, secret_key = None, endpoint_url = None, data_key = None): # type: ignore
     # access_key = "admin"
     # secret_key = "password"
     # endpoint_url = "http://127.0.0.1:9000"
+    access_key = access_key or os.environ.get("AWS_ACCESS_KEY_ID", "admin")
+    secret_key = secret_key or os.environ.get("AWS_SECRET_ACCESS_KEY", "root@123")
+    endpoint_url = endpoint_url or os.environ.get("S3_ENDPOINT_URL", "http://localhost:9000")
+
 
     # --- NEED TO HANDLE EXCEPTION ----
     s3 = boto3.client(  # type: ignore
