@@ -67,7 +67,7 @@ curl -X POST "http://localhost:8000/predict" \
 
 ```json
 {
-  "prediction": 1
+  "Survived": 1
 }
 ```
 
