@@ -48,7 +48,7 @@ Build and run the containerized API:
 docker build -t clarion-api .
 
 # Run container
-docker run -p 8000:8000 clarion-api
+docker run -p 80:80 clarion-api
 ```
 
 Access the API at [http://localhost:8000](http://localhost:8000).
