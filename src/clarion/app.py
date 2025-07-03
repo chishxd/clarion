@@ -10,7 +10,7 @@ from pydantic import BaseModel
 import joblib
 import pandas as pd
 import numpy as np
-from clarion import utils
+from . import utils
 from contextlib import asynccontextmanager
 
 class PassengerData(BaseModel):
@@ -38,9 +38,9 @@ class ModelService:
             scaler_path (str, optional): Path to the scaler file. Defaults to '/tmp/scaler.pkl'.
             columns_path (str, optional): Path to the training columns file. Defaults to '/tmp/columns.pkl'.
         """
-        self.model = joblib.load(model_path)
-        self.scaler = joblib.load(scaler_path)
-        self.training_columns = joblib.load(columns_path)
+        self.model = joblib.load(model_path) # type: ignore
+        self.scaler = joblib.load(scaler_path) # type: ignore
+        self.training_columns = joblib.load(columns_path) # type: ignore
 
     def preprocess(self, data: PassengerData) -> np.ndarray:
         """
@@ -55,9 +55,9 @@ class ModelService:
         df = pd.DataFrame([data.model_dump()])
         df['Is_Alone'] = ((df['SibSp'] + df['Parch']) == 0).astype(int)
         df_encoded = pd.get_dummies(data=df, columns=["Sex", "Embarked"])
-        df_realigned = df_encoded.reindex(columns=self.training_columns, fill_value=0)
-        df_scaled = self.scaler.transform(df_realigned)
-        return df_scaled
+        df_realigned = df_encoded.reindex(columns=self.training_columns, fill_value=0) # type: ignore
+        df_scaled = self.scaler.transform(df_realigned) # type: ignore
+        return df_scaled # type: ignore
 
     def predict(self, data: np.ndarray) -> int:
         """
@@ -69,8 +69,8 @@ class ModelService:
         Returns:
             int: The prediction (0 for not survived, 1 for survived).
         """
-        prediction = self.model.predict(data)
-        return int(prediction[0])
+        prediction = self.model.predict(data) # type: ignore
+        return int(prediction[0]) # type: ignore
 
 async def download_models():
     """
