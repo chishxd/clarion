@@ -1,16 +1,16 @@
 # Clarion 🚀
 
-A lightweight FastAPI service for serving machine learning classification models — containerized and ready for local or cloud deployment.
+A lightweight FastAPI service for serving machine learning classification models — containerized and ready for local development with S3-compatible storage (MinIO).
 
 ---
 
 ## 📌 Features
 
-- ✅ **FastAPI** web server with `/predict` endpoint
+- ✅ FastAPI web server with `/predict` endpoint
 - ✅ Loads a serialized ML model (`.pkl`) for live predictions
-- ✅ Integrates with S3-compatible storage (MinIO) for model assets
-- ✅ Containerized with **Docker** for portability
-- ✅ Clean Python package structure (`src/`, `models/`, `tests/`)
+- ✅ Integrates with S3-compatible storage (MinIO)
+- ✅ Local Docker Compose setup for full-stack dev
+- ✅ Clean Python package structure (`src/clarion/`)
 
 ---
 
@@ -23,6 +23,8 @@ git clone https://github.com/chishxd/clarion.git
 cd clarion
 ````
 
+---
+
 ### 2️⃣ Local development
 
 ```bash
@@ -30,7 +32,7 @@ cd clarion
 python -m venv .venv
 source .venv/bin/activate
 
-# Install the package in editable mode
+# Install in editable mode
 pip install -e .
 
 # Run the API server with hot reload
@@ -39,31 +41,33 @@ uvicorn clarion.app:app --reload
 
 ---
 
-## 🐳 Docker
+## 🐳 Docker Compose (Recommended)
 
-Build and run the containerized API:
+Run the API server + MinIO together:
 
 ```bash
-# Build image
-docker build -t clarion-api .
+# Make sure you have a .env file with your MinIO credentials:
+echo "AWS_ACCESS_KEY_ID=admin" > .env
+echo "AWS_SECRET_ACCESS_KEY=root@123" >> .env
 
-# Run container
-docker run -p 80:80 clarion-api
+# Then build and run containers
+docker compose up --build -d
 ```
 
-Access the API at [http://localhost:8000](http://localhost:8000).
+* Clarion API: [http://localhost:80](http://localhost:80)
+* MinIO Console: [http://localhost:9001](http://localhost:9001)
 
 ---
 
 ## 🔬 Example API Request
 
 ```bash
-curl -X POST "http://localhost:8000/predict" \
+curl -X POST "http://localhost:80/predict" \
   -H "Content-Type: application/json" \
-  -d '{"feature1": 1.2, "feature2": 0.8, "...": "..."}'
+  -d '{"PassengerId": 123, "Pclass": 1, ...}'
 ```
 
-**Sample Response**
+**Example Response**
 
 ```json
 {
@@ -86,20 +90,27 @@ pytest
 ## ⚙️ Roadmap
 
 * [x] Local FastAPI prediction endpoint
-* [x] Model file versioning (`models/`)
-* [x] S3-compatible storage tested with MinIO
-* [x] Containerized with Docker
-* [ ] Cloud deployment (Planned)
+* [x] Model versioning & download from MinIO
+* [x] Docker Compose setup
+* [ ] Production cloud deployment (On hold — budget-dependent)
 
 ---
 
 ## 📜 License
 
-Distributed under the **MIT License**.
+Distributed under the MIT License.
 
 ---
 
 ## ✨ Credits
 
-Clarion is built as part of the **Cloud Computing for Data Science** curriculum.
-It follows up on the [AutoCleanSE](https://github.com/chishxd/autocleanse) project for robust data preprocessing.
+Clarion is built as part of the *Cloud Computing for Data Science* curriculum — and follows up on [AutoCleanSE](https://github.com/chishxd/autocleanse).
+
+---
+## ⚠️ Notes
+
+* Keep `.env` in `.gitignore` — don’t commit credentials.
+* For production, use real secrets + a secure MinIO setup.
+* Current version is for local dev & student projects — not hardened for prod yet.
+
+---
