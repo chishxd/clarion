@@ -4,8 +4,14 @@ __pycache__/
 .venv/
 dist/
 *.egg-info/
+.pytest_cache/
 
+#Tests
+tests/
+#Dummy Data
+tests/dummy-data
 # IDE / OS specific
 .vscode/
 .idea/
 .DS_Store
+.env

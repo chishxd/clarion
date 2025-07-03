@@ -1,0 +1,11 @@
+# Ignore your local venv
+.venv/
+__pycache__/
+*.pyc
+
+# Ignore tests and dummy data
+tests/
+tests/dummy-data/
+
+# Ignore your local .env if you don’t want it baked in
+.env
